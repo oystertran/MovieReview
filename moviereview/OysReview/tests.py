@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from .models import OysReviewType, Movie, Review
 import datetime
 from .forms import MovieForm
+from django.urls import reverse_lazy, reverse
 
 # Create your tests here.
 
@@ -42,3 +43,19 @@ class NewMovieForm(TestCase):
             }
         form = MovieForm (data)
         self.assertTrue(form.is_valid)
+
+class New_Movie_Authentication_Test(TestCase):
+    def setUp(self):
+        self.test_user = User.objects.create_user(username = 
+        'testuser1', password = 'P@ssword1')
+        self.type = OysReviewType.objects.create(typename = 'romantic')
+        self.movie = Movie.objects.create(moviename = 'Romeo + Juliet', 
+        movietype = self.type, user = self.test_user, 
+        datepremiered =datetime.date(1996,10,27), 
+        movieurl = 'http://www.hulu.com',
+        description = "A romantic movie based on Shakespeare's Romeo and Juliet staring Leonardo Dicaprio")
+        
+    def test_redirect_if_not_logged_in(self):
+        response = self.client.get(reverse('newmovie'))
+        self.assertRedirects(response, 
+        '/accounts/login/?next=/OysReview/newmovie')
