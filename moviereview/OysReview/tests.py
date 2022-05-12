@@ -2,6 +2,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 from .models import OysReviewType, Movie, Review
 import datetime
+from .forms import MovieForm
 
 # Create your tests here.
 
@@ -28,3 +29,16 @@ class MovieTest(TestCase):
 
     def test_string(self):
         self.assertEqual(str(self.movie),'How To Become a Tyrant')
+
+class NewMovieForm(TestCase):
+    def test_movieform(self):
+        data = {
+                'moviename' : 'The Avenger',
+                'movietype': 'Super-heroes', 
+                'user': 'oyster_tran',
+                'dateentered': '2022-5-7',
+                'producturl': 'https://www.disneyplus.com',
+                'description':'A good action movie'
+            }
+        form = MovieForm (data)
+        self.assertTrue(form.is_valid)

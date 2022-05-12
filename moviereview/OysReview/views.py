@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404
 from .models import Movie, OysReviewType, Review
 from django.urls import reverse_lazy
+from .forms import MovieForm
 
 # Create your views here.
 
@@ -16,3 +17,17 @@ def movieDetail (request,id):
     movie = get_object_or_404(Movie, pk = id)
     return render(request,'OysReview/moviedetail.html',
     {'movie': movie})
+
+def newMovie(request):
+    form = MovieForm
+
+    if request.method =='POST':
+        form = MovieForm(request.POST)
+        if form.is_valid():
+            post = form.save(commit = True)
+            post.save()
+            form = MovieForm
+    else:
+        form = MovieForm()
+    return render(request,'oysreview/newmovie.html',
+    {'form':form})
