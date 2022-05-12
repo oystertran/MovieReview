@@ -3,7 +3,8 @@
 <h2>Movies</h2>
 <ul>
     {% for p in movie_list %}
-      <li>{{ p.moviename }}</a></li>
+      <li><a href = "{% url 'detail' id=p.id %}">
+        {{ p.moviename }}</a></li>
     {% endfor %}
 </ul>
 
